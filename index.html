@@ -572,14 +572,17 @@ function postSelection() {
 		},10);				
 		
 		_map.infoWindow.setTitle(_selected.attributes.getValueCI(FIELDNAME_TITLE));
-		var shortDesc = _selected.attributes.getValueCI(FIELDNAME_SHORTDESC);
-		if (shortDesc)
-			_map.infoWindow.setContent(shortDesc+"<p><span class='infoWindowLink'>Details >></span></p>");
-		else
-			_map.infoWindow.setContent("<span class='infoWindowLink'>Details >></span>");
+		var infoDiv = $("<div></div>");
+		$(infoDiv).append("<div><span style='font-weight:bold'>Teaching:</span><span style='padding-left:5px'>"+_selected.attributes.getValueCI("Teaching")+"</span></div>");
+		$(infoDiv).append("<div><span style='font-weight:bold'>Research:</span><span style='padding-left:5px'>"+_selected.attributes.getValueCI("Research")+"</span></div>");
+		$(infoDiv).append("<div><span style='font-weight:bold'>Citations:</span><span style='padding-left:5px'>"+_selected.attributes.getValueCI("Citations")+"</span></div>");
+		$(infoDiv).append("<p>");
+		$(infoDiv).append("<div><a href='http://"+_selected.attributes.getValueCI(FIELDNAME_WEBSITE)+"' target='_blank'>Website</a><span id='zoomToLink' class='infoWindowLink' style='float:right'>Zoom To>></span></div>");
+		_map.infoWindow.setContent($(infoDiv).html());
 		_map.infoWindow.show(_selected.geometry);	
-		$(".infoWindowLink").click(function(e) {
-			showDetails(_selected);
+		
+		$("#zoomToLink").click(function(e) {
+			_map.centerAndZoom(_selected.geometry, 15);
 		});		
 		
 		// light up the corresponding tile.
